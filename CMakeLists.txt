@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.2)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
-project(filter_ip VERSION ${PROJECT_VESRION})
+project(ipfilter VERSION ${PROJECT_VESRION})
 
 # Add directory with gtest
 add_subdirectory(
