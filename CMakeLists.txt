@@ -3,61 +3,63 @@ cmake_minimum_required(VERSION 3.2)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
-project(helloworld VERSION ${PROJECT_VESRION})
+project(filter_ip VERSION ${PROJECT_VESRION})
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+# Add directory with gtest
+add_subdirectory(
+    "${CMAKE_CURRENT_SOURCE_DIR}/googletest"
+    "googletest"
+)
 
 configure_file(version.h.in version.h)
 
-add_executable(helloworld_cli main.cpp)
-add_library(helloworld lib.cpp)
-add_executable(test_version test_version.cpp)
+add_executable(ipfilter_cli main.cpp)
+add_library(ipfilter_lib lib.cpp)
+add_executable(unit_tests test_version.cpp)
 
-set_target_properties(helloworld_cli helloworld test_version PROPERTIES
+set_target_properties(ipfilter_cli ipfilter_lib unit_tests PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 target_include_directories(helloworld
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
-set_target_properties(test_version PROPERTIES
-    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
-)
 
-target_link_libraries(helloworld_cli PRIVATE
-    helloworld
+target_link_libraries(ipfilter_cli PRIVATE
+    ipfilter_lib
 )
 target_link_libraries(test_version
-    ${Boost_LIBRARIES}
-    helloworld
+    gtest
+    gtest_main
+    ipfilter_lib
 )
 
 if (MSVC)
-    target_compile_options(helloworld_cli PRIVATE
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    target_compile_options(ipfilter_cli PRIVATE
         /W4
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(ipfilter_lib PRIVATE
         /W4
     )
-    target_compile_options(test_version PRIVATE
+    target_compile_options(unit_tests PRIVATE
         /W4
     )
 else ()
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(ipfilter_cli PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(ipfilter_lib PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(test_version PRIVATE
+    target_compile_options(unit_tests PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
 endif()
 
 
 
-install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
+install(TARGETS ipfilter_cli RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
@@ -67,8 +69,8 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
 set(CPACK_PACKAGE_CONTACT example@example.com)
 
-include(CPack)
+# include(CPack)
 
 enable_testing()
 
-add_test(test_version test_version)
+# add_test(unit_tests unit_tests)
