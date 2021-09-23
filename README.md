@@ -7,9 +7,9 @@
 ```
 mkdir build
 cd build
-cmake . -DPATCH_VERSION=1
+cmake .. -DPATCH_VERSION=1
 cmake --build .
 cmake --build . --target test
 cmake --build . --target package
-cat ../ip_filter.tsv | ./ip_filter | md5sum
+cat ../ip_filter.tsv | ./ipfilter | md5sum
 ```
