@@ -1,79 +1,24 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
-#include <iterator>
 #include <string>
 #include <vector>
-#include <tuple>
-#include <algorithm>
 #include <stdexcept>
-#include <cstdio>
-
-struct Ip {
-    short first;
-    short second;
-    short third;
-    short forth;
-};
-
-using IpPool = std::vector<Ip>;
-
-std::ostream& operator<<(std::ostream& os, const Ip& ip) {
-    os << ip.first << '.'
-        << ip.second << '.'
-        << ip.third << '.'
-        << ip.forth;
-
-    return os;
-}
-
-struct IpReverseComparator {
-    bool operator() (const Ip& lhs, const Ip& rhs) const {
-        return std::tie(lhs.first, lhs.second, lhs.third, lhs.forth) >
-            std::tie(rhs.first, rhs.second, rhs.third, rhs.forth);
-    } 
-};
-
-void filter(const IpPool& ipPool, std::ostream& os, short num) {
-    std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<Ip>(os, "\n"), [num](const Ip& ip) {
-            return ip.first == num;
-        });
-}
-
-void filter(const IpPool& ipPool, std::ostream& os, short num1, short num2) {
-    std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<Ip>(os, "\n"), [num1, num2](const Ip& ip) {
-            return ip.first == num1 && ip.second == num2;
-        });
-}
-
-void filter_any(const IpPool& ipPool, std::ostream& os, short num) {
-    std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<Ip>(os, "\n"), [num](const Ip& ip) {
-            return ip.first == num || ip.second == num || ip.third == num || ip.forth == num;
-        });
-}
-
-Ip parse(const std::string &str) {
-    Ip ip {0, 0, 0, 0};
-
-    int temp, temp2;
-    if (std::sscanf(str.c_str(), "%hd.%hd.%hd.%hd\t%d\t%d", &ip.first, &ip.second, &ip.third, &ip.forth, &temp, &temp2) == 6) {
-        return ip;
-    }
-
-    throw std::invalid_argument("Invalid ip address line: " + str);
-}
+#include <iterator>
+#include <algorithm>
+#include "ip.h"
 
 int main()
 {
-    IpPool ipPool;
+    ip::IpPool ipPool;
     try
     {
         for (std::string line; std::getline(std::cin, line);) {
-            ipPool.push_back(parse(line));
+            ipPool.push_back(ip::parse(line));
         }
 
-        std::sort(begin(ipPool), end(ipPool), IpReverseComparator{});
-        std::copy(begin(ipPool), end(ipPool), std::ostream_iterator<Ip>(std::cout, "\n"));
+        std::sort(begin(ipPool), end(ipPool), ip::IpReverseComparator{});
+        std::copy(begin(ipPool), end(ipPool), std::ostream_iterator<ip::Ip>(std::cout, "\n"));
 
         // 222.173.235.246
         // 222.130.177.64
@@ -83,7 +28,7 @@ int main()
         // 1.29.168.152
         // 1.1.234.8
 
-        filter(ipPool, std::cout, 1);
+        ip::filter(ipPool, std::cout, 1);
 
         // 1.231.69.33
         // 1.87.203.225
@@ -91,14 +36,14 @@ int main()
         // 1.29.168.152
         // 1.1.234.8
 
-        filter(ipPool, std::cout, 46, 70);
+        ip::filter(ipPool, std::cout, 46, 70);
 
         // 46.70.225.39
         // 46.70.147.26
         // 46.70.113.73
         // 46.70.29.76
 
-        filter_any(ipPool, std::cout, 46);
+        ip::filter_any(ipPool, std::cout, 46);
 
         // 186.204.34.46
         // 186.46.222.194
