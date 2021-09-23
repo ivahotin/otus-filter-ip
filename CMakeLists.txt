@@ -21,14 +21,14 @@ set_target_properties(ipfilter_cli ipfilter_lib unit_tests PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
-target_include_directories(helloworld
+target_include_directories(ipfilter_lib
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
 target_link_libraries(ipfilter_cli PRIVATE
     ipfilter_lib
 )
-target_link_libraries(test_version
+target_link_libraries(unit_tests
     gtest
     gtest_main
     ipfilter_lib
@@ -69,8 +69,8 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
 set(CPACK_PACKAGE_CONTACT example@example.com)
 
-# include(CPack)
+include(CPack)
 
 enable_testing()
 
-# add_test(unit_tests unit_tests)
+add_test(unit_tests unit_tests)
