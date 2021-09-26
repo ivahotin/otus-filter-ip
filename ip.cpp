@@ -17,21 +17,24 @@ namespace ip
         return os;
     }
 
-    void filter(const ip::IpPool& ipPool, std::ostream& os, short num) {
-        std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<ip::Ip>(os, "\n"), [num](const ip::Ip& ipAddress) {
-            return ipAddress.first == num;
+    template<>
+    void filter<FilterType::First_1>(const ip::IpPool& ipPool, std::ostream& os) {
+        std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<ip::Ip>(os, "\n"), [](const ip::Ip& ipAddress) {
+            return ipAddress.first == 1;
         });
     }
 
-    void filter(const ip::IpPool& ipPool, std::ostream& os, short num1, short num2) {
-        std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<ip::Ip>(os, "\n"), [num1, num2](const ip::Ip& ipAddress) {
-            return ipAddress.first == num1 && ipAddress.second == num2;
+    template<>
+    void filter<FilterType::First_46_Second_70>(const ip::IpPool& ipPool, std::ostream& os) {
+        std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<ip::Ip>(os, "\n"), [](const ip::Ip& ipAddress) {
+            return ipAddress.first == 46 && ipAddress.second == 70;
         });
     }
 
-    void filter_any(const ip::IpPool& ipPool, std::ostream& os, short num) {
-        std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<ip::Ip>(os, "\n"), [num](const ip::Ip& ipAddress) {
-            return ipAddress.first == num || ipAddress.second == num || ipAddress.third == num || ipAddress.forth == num;
+    template<>
+    void filter<FilterType::Any_46>(const ip::IpPool& ipPool, std::ostream& os) {
+        std::copy_if(begin(ipPool), end(ipPool), std::ostream_iterator<ip::Ip>(os, "\n"), [](const ip::Ip& ipAddress) {
+            return ipAddress.first == 46 || ipAddress.second == 46 || ipAddress.third == 46 || ipAddress.forth == 46;
         }); 
     }
 

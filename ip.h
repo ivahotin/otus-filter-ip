@@ -20,9 +20,14 @@ namespace ip
         bool operator() (const Ip& lhs, const Ip& rhs) const;
     };
 
-    void filter(const IpPool&, std::ostream&, short, short);
-    void filter(const IpPool&, std::ostream&, short);
-    void filter_any(const IpPool&, std::ostream&, short);
+    enum class FilterType {
+        First_1,
+        First_46_Second_70,
+        Any_46
+    };
+    
+    template <FilterType filterType>
+    void filter(const IpPool&, std::ostream&);
 
     Ip parse(const std::string &str);
 }

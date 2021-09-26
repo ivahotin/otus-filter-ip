@@ -28,7 +28,7 @@ int main()
         // 1.29.168.152
         // 1.1.234.8
 
-        ip::filter(ipPool, std::cout, 1);
+        ip::filter<ip::FilterType::First_1>(ipPool, std::cout);
 
         // 1.231.69.33
         // 1.87.203.225
@@ -36,14 +36,14 @@ int main()
         // 1.29.168.152
         // 1.1.234.8
 
-        ip::filter(ipPool, std::cout, 46, 70);
+        ip::filter<ip::FilterType::First_46_Second_70>(ipPool, std::cout);
 
         // 46.70.225.39
         // 46.70.147.26
         // 46.70.113.73
         // 46.70.29.76
 
-        ip::filter_any(ipPool, std::cout, 46);
+        ip::filter<ip::FilterType::Any_46>(ipPool, std::cout);
 
         // 186.204.34.46
         // 186.46.222.194
