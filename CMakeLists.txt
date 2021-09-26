@@ -6,10 +6,12 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(ip_filter VERSION ${PROJECT_VESRION})
 
 # Add directory with gtest
-add_subdirectory(
-    "${CMAKE_CURRENT_SOURCE_DIR}/googletest"
-    "googletest"
-)
+# add_subdirectory(
+#     "${CMAKE_CURRENT_SOURCE_DIR}/googletest"
+#     "googletest"
+# )
+
+find_package(GTest REQUIRED)
 
 configure_file(version.h.in version.h)
 
