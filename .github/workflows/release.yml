@@ -14,6 +14,11 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get install libgtest-dev build-essential cmake -y
+      - run: cd /usr/src/gtest
+      - run: sudo cmake CMakeLists.txt
+      - run: sudo make
+      - run: sudo cp *.a /usr/lib
+      - run: cd -
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
       - run: cmake --build . --target test

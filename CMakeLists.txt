@@ -35,9 +35,11 @@ target_link_libraries(ipfilter PRIVATE
     version_lib
     ip_lib
 )
+target_include_directories(unit_tests PRIVATE ${GTest_INCLUDE_DIR})
 target_link_libraries(unit_tests
     gtest
     gtest_main
+    pthread
     version_lib
     ip_lib
 )
